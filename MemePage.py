@@ -23,7 +23,7 @@ def index():
 
 @app.route('/download')
 def download():
-   return send_file('hi.txt', as_attachment=True)
+   return send_file('Meme.exe', as_attachment=True)
 
 app.run(host = "0.0.0.0", port=80)
 
