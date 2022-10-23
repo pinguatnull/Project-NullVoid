@@ -1,8 +1,3 @@
-
-# Target.py (Target Side Script)
-# Author: Syed Naveed Abbas
-
-
 # TCP Connection
 import socket
 
