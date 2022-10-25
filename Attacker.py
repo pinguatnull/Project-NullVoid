@@ -3,11 +3,11 @@ import os
 import time
 import mysql.connector as sql
 from datetime import date
+import geocoder
 
 db = sql.connect(user='root', password='password', host='localhost', database='NullVoid')
 db_cur = db.cursor()
-db_cur.execute("CREATE TABLE IF NOT EXISTS Victims(IP_Addr varchar(50) NOT NULL, Port varchar(50), Date varchar(50), Time varchar(50)")
-
+db_cur.execute("CREATE TABLE IF NOT EXISTS Victims(IP_Addr varchar(30) NOT NULL, Port varchar(50),Location Varchar(50), Date varchar(20), Time varchar(50))")
 
 def connect():
 
@@ -23,9 +23,11 @@ def connect():
     Port = addr[1]
     Date = date.today()
     t = time.localtime()
-    Time = time.strftime("%H:%M:%S", t) 
-    query = "INSERT INTO Victims(IP_Addr, Port, Date, Time) VALUES (%s, %s, %s, %s)"
-    values = (IP, Port, Date, Time)
+    Time = time.strftime("%H:%M:%S", t)
+    g = geocoder.ip(addr[0])
+    Location = g.city
+    query = "INSERT INTO Victims(IP_Addr, Port, Location, Date, Time) VALUES (%s, %s, %s, %s, %s)"
+    values = (IP, Port, Location, Date, Time)
     db_cur.execute(query, values)
     db.commit()
 
