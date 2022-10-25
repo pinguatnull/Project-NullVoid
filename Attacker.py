@@ -23,7 +23,7 @@ def connect():
     location = g.city
     latitude = g.latlng[0]
     longitude = g.latlng[1]
-    query = "INSERT INTO Victims(IP_Addr, Location, Latitude, Longitude) VALUES (%s, %s, %s, %s)")
+    query = "INSERT INTO Victims(IP_Addr, Location, Latitude, Longitude) VALUES (%s, %s, %s, %s)"
     values = (addr, location, latitude, longitude)
     db_cur.execute(query, values)
 
