@@ -9,7 +9,7 @@ import time
 app = Flask(__name__)
 
 def get_meme():
-    url ="https://meme-api.herokuapp.com/gimme/school_memes"
+    url ="https://meme-api.herokuapp.com/gimme/terriblefacebookmemes"
     response = json.loads(requests.request("GET",url).text)
     meme_large = response["preview"][-2]
     subreddit = response["subreddit"]
